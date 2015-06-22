@@ -35,6 +35,7 @@ namespace Format_Razor
         protected override void ProcessRecord()
         {
             WriteDebug("ProcessRecord");
+            WriteObject("---" + Model.ToString());
             base.ProcessRecord();
         }
     }

@@ -1,4 +1,5 @@
-﻿using RazorEngine;
+﻿using Format_Razor.RazorEngine;
+using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using System;
@@ -8,37 +9,32 @@ using System.Management.Automation;
 
 namespace Format_Razor
 {
-    [Cmdlet(VerbsCommon.Format, "Razor", DefaultParameterSetName="Inline")]
+    [Cmdlet(VerbsCommon.Format, "Razor", DefaultParameterSetName = "Inline")]
     [Description("Creates the document using specified template and model")]
     public class FormatRazor : PSCmdlet
     {
         [Parameter(Mandatory = true,
             Position = 0,
             ValueFromPipeline = true,
-            ParameterSetName = ParamSets.Inline,
-            HelpMessage = "Model object to be used within template")]
-        [Parameter(Mandatory = true,
-            Position = 0,
-            ValueFromPipeline = true,
-            ParameterSetName = ParamSets.External,
             HelpMessage = "Model object to be used within template")]
         [ValidateNotNullOrEmpty]
         public object Model { get; set; }
 
         [Parameter(ParameterSetName = ParamSets.External,
-            Mandatory=true,
-            HelpMessage="Path to external template file")]
+            Mandatory = true,
+            HelpMessage = "Path to external template file")]
         [ValidateNotNullOrEmpty]
         public string TemplatePath { get; set; }
 
         [Parameter(ParameterSetName = ParamSets.Inline,
-            Mandatory=true,
+            Mandatory = true,
             HelpMessage = "Inline template")]
         [ValidateNotNullOrEmpty]
         public string Template { get; set; }
 
         protected override void BeginProcessing()
         {
+            WriteDebug("BeginProcessing paramSet:" + this.ParameterSetName);
             var config = new TemplateServiceConfiguration();
             //config.Language = Language.VisualBasic; // VB.NET as template language.
             //config.EncodedStringFactory = new RawStringFactory(); // Raw string encoding.
@@ -47,6 +43,7 @@ namespace Format_Razor
             config.CachingProvider = new DefaultCachingProvider(t => { });
             config.DisableTempFileLocking = true;
             Engine.Razor = RazorEngineService.Create(config); ;
+
 
             if (ParameterSetName == ParamSets.External)
             {
@@ -66,10 +63,24 @@ namespace Format_Razor
             }
         }
 
+        public ITemplateSource GetTemplateSource()
+        {
+            if (this.ParameterSetName == ParamSets.Inline)
+            {
+                return new LoadedTemplateSource(Template);
+            }
+            else
+            {
+                return new FileTemplate(this.TemplatePath);
+            }
+        }
+
         protected override void ProcessRecord()
         {
             WriteDebug("ProcessRecord, paramSet:" + this.ParameterSetName);
-            WriteObject(Engine.Razor.RunCompile(Template, "templateKey", null, Model));
+
+            var template = GetTemplateSource();
+            WriteObject(Engine.Razor.RunCompile(template, "templateKey", null, Model));
             base.ProcessRecord();
         }
     }

@@ -17,7 +17,11 @@ namespace Format_Razor
             ValueFromPipeline = true,
             ParameterSetName = ParamSets.Inline,
             HelpMessage = "Model object to be used within template")]
-        [Parameter(ParameterSetName = ParamSets.External)]
+        [Parameter(Mandatory = true,
+            Position = 0,
+            ValueFromPipeline = true,
+            ParameterSetName = ParamSets.External,
+            HelpMessage = "Model object to be used within template")]
         [ValidateNotNullOrEmpty]
         public object Model { get; set; }
 

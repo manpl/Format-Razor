@@ -5,6 +5,13 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Format-Razor-Cmdlet", "Format-Razor-Cmdlet\Format-Razor-Cmdlet.csproj", "{1EB3513D-9026-43F5-88BE-62026CBAFEA3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{660FB2ED-9787-402E-AD9A-1286F44770D5}"
+	ProjectSection(SolutionItems) = preProject
+		Format-Razor-Tests.ps1 = Format-Razor-Tests.ps1
+	EndProjectSection
+EndProject
+Project("{F5034706-568F-408A-B7B3-4D38C6DB8A32}") = "Format-Razor-Tests", "Format-Razor-Tests\Format-Razor-Tests.pssproj", "{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,10 @@ Global
 		{1EB3513D-9026-43F5-88BE-62026CBAFEA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1EB3513D-9026-43F5-88BE-62026CBAFEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1EB3513D-9026-43F5-88BE-62026CBAFEA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CAFC0C6-A428-4D30-A9F9-700E829FEA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

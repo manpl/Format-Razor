@@ -2,7 +2,6 @@
 using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
-using System;
 using System.ComponentModel;
 using System.IO;
 using System.Management.Automation;
@@ -31,6 +30,22 @@ namespace Format_Razor
             HelpMessage = "Inline template")]
         [ValidateNotNullOrEmpty]
         public string Template { get; set; }
+
+        private ITemplateSource templateSource;
+        private ITemplateSource TemplateSource
+        {
+            get
+            {
+                if (templateSource == null)
+                {
+                    templateSource = this.ParameterSetName == ParamSets.Inline ?
+                        (ITemplateSource)new LoadedTemplateSource(Template) :
+                        new FileTemplate(this.TemplatePath);
+                }
+
+                return templateSource;
+            }
+        }
 
         protected override void BeginProcessing()
         {
@@ -63,24 +78,10 @@ namespace Format_Razor
             }
         }
 
-        public ITemplateSource GetTemplateSource()
-        {
-            if (this.ParameterSetName == ParamSets.Inline)
-            {
-                return new LoadedTemplateSource(Template);
-            }
-            else
-            {
-                return new FileTemplate(this.TemplatePath);
-            }
-        }
-
         protected override void ProcessRecord()
         {
             WriteDebug("ProcessRecord, paramSet:" + this.ParameterSetName);
-
-            var template = GetTemplateSource();
-            WriteObject(Engine.Razor.RunCompile(template, "templateKey", null, Model));
+            WriteObject(Engine.Razor.RunCompile(TemplateSource, "templateKey", null, Model));
             base.ProcessRecord();
         }
     }

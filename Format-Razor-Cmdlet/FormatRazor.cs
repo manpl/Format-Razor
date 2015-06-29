@@ -31,6 +31,9 @@ namespace Format_Razor
         [ValidateNotNullOrEmpty]
         public string Template { get; set; }
 
+        [Parameter, ValidateSet("C#", "VB")]
+        public string Language { get; set; }
+
         private ITemplateSource templateSource;
         private ITemplateSource TemplateSource
         {
@@ -51,7 +54,14 @@ namespace Format_Razor
         {
             WriteDebug("BeginProcessing paramSet:" + this.ParameterSetName);
             var config = new TemplateServiceConfiguration();
-            //config.Language = Language.VisualBasic; // VB.NET as template language.
+
+            if ((this.Language ?? "").ToLower() == "vb")
+                config.Language = global::RazorEngine.Language.VisualBasic; // VB.NET as template language.
+            else
+                config.Language = global::RazorEngine.Language.CSharp;
+
+            WriteDebug("Selected language: " + config.Language);
+
             //config.EncodedStringFactory = new RawStringFactory(); // Raw string encoding.
             //config.EncodedStringFactory = new HtmlEncodedStringFactory(); // Html encoding.
             //config.Debug = IsDebug;

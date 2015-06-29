@@ -3,6 +3,7 @@
 $solutoinDir = $here.Parent.FullName
 $modulePath = Join-Path $solutoinDir 'Format-Razor-Cmdlet\bin\Debug\Format-Razor.dll'
 
+
 Import-Module $modulePath
 
 Describe "Format-Razor parameters validation" {
@@ -51,4 +52,12 @@ Describe "Format-Razor parameters validation" {
         $result = ($model | Format-Razor -Template "@Model.Length")
         $result | Should BeExactly 7
     }
+
+    It "Simple VB template" {
+        $model = (1,2)
+        $result = Format-Razor -Model $model -Language VB -Template "@For Each item As String In Model@<i>@item</i>Next"
+        $result | Should BeExactly "<i>1</i><i>2</i>"
+    }
 }
+
+Remove-Module -Name Format-Razor 
